@@ -7,7 +7,7 @@ import { AlertCircle } from 'lucide-react';
 interface Survey {
   question: string;
   response: string;
-  timestamp: string;
+  submittedAt: string;
 }
 
 const Dashboard: React.FC = () => {
@@ -48,7 +48,7 @@ const Dashboard: React.FC = () => {
   }
 
   return (
-    <div className="container mx-auto p-4">
+    <div className="container mx-auto">
       <div className="mb-8">
         <h2 className="text-2xl font-bold mb-4">Today's Question</h2>
         {currentQuestion ? (
@@ -92,7 +92,7 @@ const Dashboard: React.FC = () => {
                 <p className="font-bold">{survey.question}</p>
                 <p className="mt-2">{survey.response}</p>
                 <p className="text-sm text-gray-500 mt-1">
-                  {new Date(survey.timestamp).toLocaleDateString()}
+                  {new Date(survey.submittedAt).toLocaleDateString()}
                 </p>
               </div>
             ))}

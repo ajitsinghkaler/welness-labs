@@ -20,19 +20,22 @@ export class SurveysService {
     const surveys = await this.surveyModel
       .find()
       .populate('userId', 'name email role -_id')
+      .sort({ submittedAt: -1 })
       .exec();
 
     return surveys.map(survey => {
       const { userId, ...surveyData } = survey.toObject();
       return {
         ...surveyData,
-        user: userId // userId now contains the populated user data
+        user: userId, // userId now contains the populated user data
       };
     });
   }
 
   async findByUserId(userId: string): Promise<SurveyDocument[]> {
-    return this.surveyModel.find({ userId }).exec();
+    return this.surveyModel.find({ userId })
+      .sort({ submittedAt: -1 })
+      .exec();
   }
 
   async getDefaultQuestion(): Promise<string> {

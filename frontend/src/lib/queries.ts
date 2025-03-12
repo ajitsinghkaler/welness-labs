@@ -31,20 +31,34 @@ export const useSubmitSurveyResponse = () => {
     mutationFn: apiClient.submitSurveyResponse,
     onSuccess: () => {
       // Invalidate and refetch survey history after submission
-      queryClient.invalidateQueries({ queryKey: ['surveyHistory', 'adminResponses'] });
+      queryClient.invalidateQueries({ queryKey: ['surveyHistory'] });
+      queryClient.invalidateQueries({ queryKey: ['adminResponses'] });
+      queryClient.invalidateQueries({ queryKey: ['currentSurvey'] });
     },
   });
 };
 
 // Auth mutations
 export const useLogin = () => {
+  const queryClient = useQueryClient();
+  
   return useMutation({
     mutationFn: apiClient.login,
+    onSuccess: () => {
+      // Invalidate queries when user logs in to refresh data
+      queryClient.invalidateQueries();
+    },
   });
 };
 
 export const useRegister = () => {
+  const queryClient = useQueryClient();
+  
   return useMutation({
     mutationFn: apiClient.register,
+    onSuccess: () => {
+      // Invalidate queries when user registers to refresh data
+      queryClient.invalidateQueries();
+    },
   });
 }; 
