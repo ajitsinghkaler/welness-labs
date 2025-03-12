@@ -26,9 +26,27 @@ export function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const token = localStorage.getItem('token');
     if (token) {
-      axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
-      // You might want to validate the token here
-      setIsLoading(false);
+      try {
+        // Set the token in axios headers
+        axios.defaults.headers.common['Authorization'] = `Bearer ${token}`;
+        
+        // Extract user data from JWT payload
+        const payload = JSON.parse(atob(token.split('.')[1]));
+        const userData: User = {
+          email: payload.email,
+          name: payload.name || payload.email.split('@')[0], // Fallback to email prefix if name not in token
+          role: payload.role
+        };
+        
+        setUser(userData);
+        setIsLoading(false);
+      } catch (error) {
+        console.error('Error restoring session:', error);
+        // If token is invalid, clear it
+        localStorage.removeItem('token');
+        delete axios.defaults.headers.common['Authorization'];
+        setIsLoading(false);
+      }
     } else {
       setIsLoading(false);
     }
@@ -36,15 +54,36 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const login = async (email: string, password: string) => {
     try {
+      // Remove any existing token before login
+      delete axios.defaults.headers.common['Authorization'];
+      
       const response = await axios.post(`${API_URL}/auth/login`, {
         email,
         password,
       });
+      
+      console.log('Login response:', response.data);
+      
       const { access_token } = response.data;
+      if (!access_token) {
+        throw new Error('No access token received');
+      }
+
       localStorage.setItem('token', access_token);
       axios.defaults.headers.common['Authorization'] = `Bearer ${access_token}`;
-      setUser(response.data.user);
+
+      // Extract user data from JWT payload
+      const payload = JSON.parse(atob(access_token.split('.')[1]));
+      const userData: User = {
+        email: payload.email,
+        name: email.split('@')[0], // Fallback name if not provided
+        role: payload.role
+      };
+      
+      console.log('Setting user data:', userData);
+      setUser(userData);
     } catch (error) {
+      console.error('Login error:', error);
       throw new Error('Invalid credentials');
     }
   };

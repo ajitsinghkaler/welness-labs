@@ -25,6 +25,7 @@ function AdminRoute({ children }: { children: React.ReactNode }) {
   if (isLoading) {
     return <div>Loading...</div>;
   }
+  console.log(user);
 
   if (!user || user.role !== 'admin') {
     return <Navigate to="/dashboard" />;

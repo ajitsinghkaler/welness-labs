@@ -15,11 +15,16 @@ export default function Login() {
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    setError('');
+    
     try {
+      console.log('Attempting login...');
       await login(email, password);
-      navigate('/dashboard');
+      console.log('Login successful, navigating to dashboard...');
+      navigate('/dashboard', { replace: true });
     } catch (err) {
-      setError('Invalid credentials');
+      console.error('Login error:', err);
+      setError(err instanceof Error ? err.message : 'Login failed');
     }
   };
 

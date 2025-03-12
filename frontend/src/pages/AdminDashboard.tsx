@@ -1,13 +1,20 @@
-import { useState, useEffect } from 'react';
-import { useAuth } from '../contexts/AuthContext';
-import axios from 'axios';
+import { useState, useEffect } from "react";
+import { useAuth } from "../contexts/AuthContext";
+import axios from "axios";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 interface SurveyResponse {
   _id: string;
-  userId: {
+  user: {
     name: string;
     email: string;
   };
@@ -19,7 +26,7 @@ interface SurveyResponse {
 export default function AdminDashboard() {
   const { user } = useAuth();
   const [responses, setResponses] = useState<SurveyResponse[]>([]);
-  const [error, setError] = useState('');
+  const [error, setError] = useState("");
 
   useEffect(() => {
     fetchResponses();
@@ -27,32 +34,41 @@ export default function AdminDashboard() {
 
   const fetchResponses = async () => {
     try {
-      const res = await axios.get('http://localhost:3001/surveys/admin/responses');
+      const res = await axios.get(
+        "http://localhost:3001/surveys/admin/responses"
+      );
       setResponses(res.data);
     } catch (err) {
-      setError('Failed to fetch responses');
+      setError("Failed to fetch responses");
     }
   };
 
   const handleExport = () => {
-    const csv = responses.map(r => [
-      r.userId.name,
-      r.userId.email,
-      r.question,
-      r.response,
-      new Date(r.submittedAt).toLocaleDateString()
-    ].join(',')).join('\n');
+    
+    const headers = ["Employee", "Email", "Question", "Response", "Date"];
+    const csv = [
+      headers.join(","), // Add headers to the CSV
+      ...responses.map((r) =>
+        [
+          r.user.name,
+          r.user.email,
+          r.question,
+          r.response,
+          new Date(r.submittedAt).toLocaleDateString(),
+        ].join(",")
+      ),
+    ].join("\n");
 
-    const blob = new Blob([csv], { type: 'text/csv' });
+    const blob = new Blob([csv], { type: "text/csv" });
     const url = window.URL.createObjectURL(blob);
-    const a = document.createElement('a');
+    const a = document.createElement("a");
     a.href = url;
-    a.download = 'survey-responses.csv';
+    a.download = "survey-responses.csv";
     a.click();
     window.URL.revokeObjectURL(url);
   };
 
-  if (user?.role !== 'admin') {
+  if (user?.role !== "admin") {
     return <div>Access denied</div>;
   }
 
@@ -79,8 +95,8 @@ export default function AdminDashboard() {
               <TableBody>
                 {responses.map((response) => (
                   <TableRow key={response._id}>
-                    <TableCell>{response.userId.name}</TableCell>
-                    <TableCell>{response.userId.email}</TableCell>
+                    <TableCell>{response.user.name}</TableCell>
+                    <TableCell>{response.user.email}</TableCell>
                     <TableCell>{response.question}</TableCell>
                     <TableCell>{response.response}</TableCell>
                     <TableCell>
@@ -95,4 +111,4 @@ export default function AdminDashboard() {
       </div>
     </div>
   );
-} 
+}
