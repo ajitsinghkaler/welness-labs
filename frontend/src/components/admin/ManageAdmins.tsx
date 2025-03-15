@@ -15,6 +15,7 @@ import {
   TableCell,
 } from "../ui/table";
 import { Button } from "../ui/button";
+import { UserPlus, Users, AlertCircle } from "lucide-react";
 
 // Define the AdminUser interface
 interface AdminUser {
@@ -81,22 +82,7 @@ const ManageAdmins: React.FC = () => {
       <div className="pt-4 pb-8 border-b">
         <h2 className="text-xl font-semibold mb-6 flex items-center">
           <span className="text-primary mr-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-              <circle cx="9" cy="7" r="4" />
-              <line x1="19" x2="19" y1="8" y2="14" />
-              <line x1="22" x2="16" y1="11" y2="11" />
-            </svg>
+            <UserPlus size={20} />
           </span>
           Add New Admin
         </h2>
@@ -157,22 +143,7 @@ const ManageAdmins: React.FC = () => {
       <div className="pt-2">
         <h2 className="text-xl font-semibold mb-6 flex items-center">
           <span className="text-secondary mr-2">
-            <svg
-              xmlns="http://www.w3.org/2000/svg"
-              width="20"
-              height="20"
-              viewBox="0 0 24 24"
-              fill="none"
-              stroke="currentColor"
-              strokeWidth="2"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-            >
-              <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
-              <circle cx="9" cy="7" r="4" />
-              <path d="M22 21v-2a4 4 0 0 0-3-3.87" />
-              <path d="M16 3.13a4 4 0 0 1 0 7.75" />
-            </svg>
+            <Users size={20} />
           </span>
           Current Admin Users
         </h2>
@@ -216,22 +187,7 @@ const ManageAdmins: React.FC = () => {
         ) : (
           <div className="text-center text-muted-foreground py-8">
             <div className="mb-2 flex justify-center">
-              <svg
-                xmlns="http://www.w3.org/2000/svg"
-                width="24"
-                height="24"
-                viewBox="0 0 24 24"
-                fill="none"
-                stroke="currentColor"
-                strokeWidth="2"
-                strokeLinecap="round"
-                strokeLinejoin="round"
-                className="opacity-50"
-              >
-                <circle cx="12" cy="12" r="10" />
-                <line x1="12" x2="12" y1="8" y2="12" />
-                <line x1="12" x2="12.01" y1="16" y2="16" />
-              </svg>
+              <AlertCircle size={24} className="opacity-50" />
             </div>
             No admin users found
           </div>
