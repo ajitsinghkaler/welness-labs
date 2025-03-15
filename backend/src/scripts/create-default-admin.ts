@@ -1,4 +1,4 @@
-import { connect, disconnect } from 'mongoose';
+import { connect, disconnect, Schema, model } from 'mongoose';
 import * as bcryptjs from 'bcryptjs';
 
 // Define the User model structure
@@ -20,29 +20,18 @@ async function createDefaultAdmin() {
     await connect(mongoUri);
     console.log('Connected to MongoDB');
 
-    // Get the User model
-    const UserModel = (await import('mongoose')).model<User>('User');
-    
-    // Check if the model is registered
-    if (!UserModel) {
-      console.log('User model not registered, registering now...');
-      
-      // Define the schema
-      const { Schema } = await import('mongoose');
-      const UserSchema = new Schema<User>({
-        email: { type: String, required: true },
-        password: { type: String, required: true },
-        name: { type: String, required: true },
-        role: { type: String, required: true, default: 'employee' },
-        createdAt: { type: Date, default: Date.now }
-      });
+    // Define the schema
+    const UserSchema = new Schema<User>({
+      email: { type: String, required: true, unique: true },
+      password: { type: String, required: true },
+      name: { type: String, required: true },
+      role: { type: String, required: true, default: 'employee' },
+      createdAt: { type: Date, default: Date.now }
+    });
 
-      // Register the model
-      (await import('mongoose')).model<User>('User', UserSchema);
-    }
-
-    // Get the model (now it should be registered)
-    const User = (await import('mongoose')).model<User>('User');
+    // Register the model (using mongoose.model directly)
+    // The {overwriteModels: true} option allows redefining the model if it exists
+    const User = model<User>('User', UserSchema, undefined, { overwriteModels: true });
 
     // Check if any admin users exist
     const adminCount = await User.countDocuments({ role: 'admin' });
