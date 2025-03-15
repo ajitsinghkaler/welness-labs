@@ -1,8 +1,13 @@
-import React, { useState } from 'react';
-import { useCurrentSurvey, useSurveyHistory, useSubmitSurveyResponse } from '../lib/queries';
-import { Button } from '@/components/ui/button';
-import { Textarea } from '@/components/ui/textarea';
-import { AlertCircle, PlusCircle, FileText } from 'lucide-react';
+import React, { useState } from "react";
+import {
+  useCurrentSurvey,
+  useSurveyHistory,
+  useSubmitSurveyResponse,
+} from "../lib/queries";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Alert, AlertDescription } from "@/components/ui/alert";
+import { AlertCircle, PlusCircle, FileText, CheckCircle2 } from "lucide-react";
 
 interface Survey {
   question: string;
@@ -12,12 +17,15 @@ interface Survey {
 
 const Dashboard: React.FC = () => {
   const [error, setError] = useState<string | null>(null);
-  const [response, setResponse] = useState('');
+  const [response, setResponse] = useState("");
   const [success, setSuccess] = useState(false);
 
-  const { data: currentQuestion, isLoading: isLoadingQuestion } = useCurrentSurvey();
-  const { data: surveyHistory, isLoading: isLoadingSurveys } = useSurveyHistory();
-  const { mutate: submitResponse, isPending: isSubmitting } = useSubmitSurveyResponse();
+  const { data: currentQuestion, isLoading: isLoadingQuestion } =
+    useCurrentSurvey();
+  const { data: surveyHistory, isLoading: isLoadingSurveys } =
+    useSurveyHistory();
+  const { mutate: submitResponse, isPending: isSubmitting } =
+    useSubmitSurveyResponse();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -26,25 +34,24 @@ const Dashboard: React.FC = () => {
     try {
       submitResponse(response, {
         onSuccess: () => {
-          setResponse('');
+          setResponse("");
           setError(null);
           setSuccess(true);
+          setTimeout(() => setSuccess(false), 3000);
         },
-        onError: () => {
-          setError('Failed to submit response');
+        onError: (err) => {
+          setError(
+            err instanceof Error ? err.message : "Failed to submit response"
+          );
         },
       });
     } catch (err) {
-      setError('Failed to submit response');
+      setError("Failed to submit response");
     }
   };
 
   if (isLoadingQuestion || isLoadingSurveys) {
     return <div>Loading...</div>;
-  }
-
-  if (error) {
-    return <div className="text-destructive p-6">{error}</div>;
   }
 
   return (
@@ -66,7 +73,9 @@ const Dashboard: React.FC = () => {
         {currentQuestion ? (
           <form onSubmit={handleSubmit} className="space-y-6">
             <div className="space-y-4">
-              <h3 className="text-lg font-medium text-foreground/90">{currentQuestion.question}</h3>
+              <h3 className="text-lg font-medium text-foreground/90">
+                {currentQuestion.question}
+              </h3>
               <Textarea
                 value={response}
                 onChange={(e) => setResponse(e.target.value)}
@@ -80,18 +89,29 @@ const Dashboard: React.FC = () => {
                 disabled={isSubmitting}
                 className="w-full sm:w-auto min-w-[200px] gap-2"
               >
-                {isSubmitting ? 'Submitting...' : 'Submit Response'}
+                {isSubmitting ? "Submitting..." : "Submit Response"}
               </Button>
-              {success && (
-                <div className="flex items-center gap-2 text-green-600 animate-in fade-in slide-in-from-right">
-                  <AlertCircle className="h-5 w-5" />
-                  <span className="font-medium">Response submitted successfully!</span>
-                </div>
-              )}
             </div>
+            {success && (
+              <Alert className="border-green-200 bg-green-50 text-green-600 sm:flex-1">
+                <CheckCircle2 className="h-4 w-4" />
+                <AlertDescription>
+                  Response submitted successfully!
+                </AlertDescription>
+              </Alert>
+            )}
+            {error && (
+              <Alert variant="destructive" className="mt-4">
+                <AlertCircle className="h-5 w-5" />
+                <AlertDescription>{error}</AlertDescription>
+              </Alert>
+            )}
           </form>
         ) : (
-          <p>No question available</p>
+          <Alert>
+            <AlertCircle className="h-4 w-4" />
+            <AlertDescription>No question available</AlertDescription>
+          </Alert>
         )}
       </div>
 
@@ -115,11 +135,14 @@ const Dashboard: React.FC = () => {
             ))}
           </div>
         ) : (
-          <p>No survey history available</p>
+          <Alert>
+            <AlertCircle className="h-4 w-4" />
+            <AlertDescription>No survey history available</AlertDescription>
+          </Alert>
         )}
       </div>
     </div>
   );
 };
 
-export default Dashboard; 
+export default Dashboard;

@@ -1,6 +1,7 @@
 import React from "react";
 import { useAdminResponses } from "../../lib/queries";
-import { FileText } from "lucide-react";
+import { FileText, AlertCircle, Loader2 } from "lucide-react";
+import { Alert, AlertDescription } from "@/components/ui/alert";
 
 // Define the SurveyResponse interface for proper typing
 interface SurveyResponse {
@@ -45,11 +46,21 @@ const SurveyResponses: React.FC = () => {
   };
 
   if (isLoading) {
-    return <div>Loading responses...</div>;
+    return (
+      <Alert className="m-6">
+        <Loader2 className="h-4 w-4 animate-spin" />
+        <AlertDescription>Loading responses...</AlertDescription>
+      </Alert>
+    );
   }
 
   if (error) {
-    return <div className="text-destructive p-6">Failed to fetch responses</div>;
+    return (
+      <Alert variant="destructive" className="m-6">
+        <AlertCircle className="h-4 w-4" />
+        <AlertDescription>Failed to fetch responses</AlertDescription>
+      </Alert>
+    );
   }
 
   return (

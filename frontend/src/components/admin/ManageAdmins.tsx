@@ -15,7 +15,8 @@ import {
   TableCell,
 } from "@/components/ui/table";
 import { Button } from "@/components/ui/button";
-import { UserPlus, Users, AlertCircle } from "lucide-react";
+import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
+import { UserPlus, Users, AlertCircle, CheckCircle2 } from "lucide-react";
 
 // Define the AdminUser interface
 interface AdminUser {
@@ -31,25 +32,46 @@ const ManageAdmins: React.FC = () => {
     email: "",
     password: "",
   });
+  const [success, setSuccess] = useState("");
+  const [error, setError] = useState("");
 
-  const { data: adminUsers, isLoading, error } = useAdminUsers();
+  const { data: adminUsers, isLoading, error: fetchError } = useAdminUsers();
   const { mutate: addAdmin, isPending: addingAdmin } = useAddAdminUser();
-  const { mutate: removeAdmin, isPending: removingAdmin } =
-    useRemoveAdminUser();
+  const { mutate: removeAdmin, isPending: removingAdmin } = useRemoveAdminUser();
 
   // Handle adding a new admin
   const handleAddAdmin = (e: React.FormEvent) => {
     e.preventDefault();
+    setError("");
+    setSuccess("");
     if (newAdmin.name && newAdmin.email && newAdmin.password) {
-      addAdmin(newAdmin);
-      setNewAdmin({ name: "", email: "", password: "" });
+      addAdmin(newAdmin, {
+        onSuccess: () => {
+          setNewAdmin({ name: "", email: "", password: "" });
+          setSuccess("Admin user added successfully!");
+          setTimeout(() => setSuccess(""), 3000);
+        },
+        onError: (err) => {
+          setError(err instanceof Error ? err.message : "Failed to add admin user");
+        },
+      });
     }
   };
 
   // Handle removing an admin
   const handleRemoveAdmin = (userId: string) => {
     if (window.confirm("Are you sure you want to remove this admin?")) {
-      removeAdmin(userId);
+      setError("");
+      setSuccess("");
+      removeAdmin(userId, {
+        onSuccess: () => {
+          setSuccess("Admin user removed successfully!");
+          setTimeout(() => setSuccess(""), 3000);
+        },
+        onError: (err) => {
+          setError(err instanceof Error ? err.message : "Failed to remove admin user");
+        },
+      });
     }
   };
 
@@ -61,9 +83,13 @@ const ManageAdmins: React.FC = () => {
     );
   }
 
-  if (error) {
+  if (fetchError) {
     return (
-      <div className="text-destructive p-6">Failed to fetch admin users</div>
+      <Alert variant="destructive" className="m-6">
+        <AlertCircle className="h-5 w-5" />
+        <AlertTitle>Error</AlertTitle>
+        <AlertDescription>Failed to fetch admin users</AlertDescription>
+      </Alert>
     );
   }
 
@@ -127,6 +153,18 @@ const ManageAdmins: React.FC = () => {
               />
             </div>
           </div>
+          {error && (
+            <Alert variant="destructive" className="mt-2">
+              <AlertCircle className="h-4 w-4" />
+              <AlertDescription>{error}</AlertDescription>
+            </Alert>
+          )}
+          {success && (
+            <Alert className="mt-2 border-green-200 bg-green-50 text-green-600">
+              <CheckCircle2 className="h-4 w-4" />
+              <AlertDescription>{success}</AlertDescription>
+            </Alert>
+          )}
           <Button
             type="submit"
             disabled={addingAdmin}
