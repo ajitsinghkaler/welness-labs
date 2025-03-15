@@ -25,6 +25,7 @@ A modern employee feedback collection system built with React, NestJS, and Mongo
 - React Query for data fetching
 - Context API for state management
 - Tailwind CSS for styling
+- Shadcn UI for components
 
 ### Backend
 - NestJS with TypeScript
