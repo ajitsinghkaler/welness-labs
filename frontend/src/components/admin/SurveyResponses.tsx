@@ -79,7 +79,7 @@ const SurveyResponses: React.FC = () => {
       <div className="space-y-6">
         {responses && responses.length > 0 ? (
           responses.map((response: SurveyResponse, index: number) => (
-            <div key={response._id || index} className="border p-4 rounded shadow">
+            <div key={response._id || index} className="border p-4 rounded-lg shadow">
               <div className="flex justify-between items-start mb-4">
                 <div>
                   <h3 className="font-bold">{response.user.name}</h3>

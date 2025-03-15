@@ -97,7 +97,7 @@ const Dashboard: React.FC = () => {
 
       <div className="pt-4">
         <h2 className="text-xl font-semibold mb-6 flex items-center">
-          <span className="text-secondary mr-2">
+          <span className="text-primary mr-2">
             <FileText size={20} />
           </span>
           Survey History
@@ -105,7 +105,7 @@ const Dashboard: React.FC = () => {
         {surveyHistory && surveyHistory.length > 0 ? (
           <div className="space-y-4">
             {surveyHistory.map((survey: Survey, index: number) => (
-              <div key={index} className="border p-4 rounded shadow">
+              <div key={index} className="border p-4 rounded-lg shadow">
                 <p className="font-bold">{survey.question}</p>
                 <p className="mt-2">{survey.response}</p>
                 <p className="text-sm text-gray-500 mt-1">

@@ -1,8 +1,8 @@
 import React, { useState } from "react";
 import { useSetTodayQuestion } from "../../lib/queries";
-import { Button } from "../ui/button";
-import { Textarea } from "../ui/textarea";
-import { Label } from "../ui/label";
+import { Button } from "@/components/ui/button";
+import { Textarea } from "@/components/ui/textarea";
+import { Label } from "@/components/ui/label";
 import { Edit } from "lucide-react";
 
 const TodayQuestion: React.FC = () => {

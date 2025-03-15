@@ -4,8 +4,8 @@ import {
   useAddAdminUser,
   useRemoveAdminUser,
 } from "../../lib/queries";
-import { Input } from "../ui/input";
-import { Label } from "../ui/label";
+import { Input } from "@/components/ui/input";
+import { Label } from "@/components/ui/label";
 import {
   Table,
   TableHeader,
@@ -13,8 +13,8 @@ import {
   TableHead,
   TableRow,
   TableCell,
-} from "../ui/table";
-import { Button } from "../ui/button";
+} from "@/components/ui/table";
+import { Button } from "@/components/ui/button";
 import { UserPlus, Users, AlertCircle } from "lucide-react";
 
 // Define the AdminUser interface
@@ -142,7 +142,7 @@ const ManageAdmins: React.FC = () => {
       {/* Admin Users List */}
       <div className="pt-2">
         <h2 className="text-xl font-semibold mb-6 flex items-center">
-          <span className="text-secondary mr-2">
+          <span className="text-primary mr-2">
             <Users size={20} />
           </span>
           Current Admin Users
