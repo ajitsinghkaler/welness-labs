@@ -186,11 +186,3 @@ A default admin account is automatically created during the first run of the app
 - **Password**: admin@1234
 
 For security reasons, it is highly recommended to create a new user and delete the default admin account after the first login.
-
-## Contributors
-
-This project is maintained by [Your Organization/Team Name].
-
-## License
-
-This project is licensed under the MIT License.
