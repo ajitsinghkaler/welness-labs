@@ -44,4 +44,22 @@ export const apiClient = {
     const response = await api.get('/surveys/admin/responses');
     return response.data;
   },
+  
+  // Admin functions
+  setTodayQuestion: async (question: string) => {
+    const response = await api.post('/admin/question', { question });
+    return response.data;
+  },
+  getAdminUsers: async () => {
+    const response = await api.get('/admin/users');
+    return response.data;
+  },
+  addAdminUser: async (userData: { email: string; password: string; name: string }) => {
+    const response = await api.post('/admin/users', userData);
+    return response.data;
+  },
+  removeAdminUser: async (userId: string) => {
+    const response = await api.delete(`/admin/users/${userId}`);
+    return response.data;
+  },
 }; 

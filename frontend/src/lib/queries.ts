@@ -61,4 +61,48 @@ export const useRegister = () => {
       queryClient.invalidateQueries();
     },
   });
+};
+
+// Admin queries and mutations
+export const useAdminUsers = () => {
+  return useQuery({
+    queryKey: ['adminUsers'],
+    queryFn: apiClient.getAdminUsers,
+  });
+};
+
+export const useSetTodayQuestion = () => {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: apiClient.setTodayQuestion,
+    onSuccess: () => {
+      // Invalidate and refetch current survey after setting new question
+      queryClient.invalidateQueries({ queryKey: ['currentSurvey'] });
+    },
+  });
+};
+
+export const useAddAdminUser = () => {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: apiClient.addAdminUser,
+    onSuccess: () => {
+      // Invalidate and refetch admin users after adding a new admin
+      queryClient.invalidateQueries({ queryKey: ['adminUsers'] });
+    },
+  });
+};
+
+export const useRemoveAdminUser = () => {
+  const queryClient = useQueryClient();
+  
+  return useMutation({
+    mutationFn: apiClient.removeAdminUser,
+    onSuccess: () => {
+      // Invalidate and refetch admin users after removing an admin
+      queryClient.invalidateQueries({ queryKey: ['adminUsers'] });
+    },
+  });
 }; 

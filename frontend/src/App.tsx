@@ -6,6 +6,8 @@ import Login from './pages/Login';
 import Register from './pages/Register';
 import Dashboard from './pages/Dashboard';
 import AdminDashboard from './pages/AdminDashboard';
+import AdminQuestion from './pages/AdminQuestion';
+import AdminUsers from './pages/AdminUsers';
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -73,6 +75,22 @@ function App() {
               element={
                 <AdminRoute>
                   <AdminDashboard />
+                </AdminRoute>
+              }
+            />
+            <Route
+              path="/admin/question"
+              element={
+                <AdminRoute>
+                  <AdminQuestion />
+                </AdminRoute>
+              }
+            />
+            <Route
+              path="/admin/users"
+              element={
+                <AdminRoute>
+                  <AdminUsers />
                 </AdminRoute>
               }
             />

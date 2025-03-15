@@ -19,4 +19,21 @@ export class Survey {
   question: string;
 }
 
-export const SurveySchema = SchemaFactory.createForClass(Survey); 
+export const SurveySchema = SchemaFactory.createForClass(Survey);
+
+// Schema for storing the daily question
+export type DailyQuestionDocument = DailyQuestion & Document;
+
+@Schema()
+export class DailyQuestion {
+  @Prop({ required: true })
+  question: string;
+
+  @Prop({ default: Date.now })
+  createdAt: Date;
+
+  @Prop({ default: true })
+  isActive: boolean;
+}
+
+export const DailyQuestionSchema = SchemaFactory.createForClass(DailyQuestion); 

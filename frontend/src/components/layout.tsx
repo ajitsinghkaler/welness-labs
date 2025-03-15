@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Link, useLocation } from 'react-router-dom';
 import { useAuth } from '../contexts/AuthContext';
-import { Menu, X, Users, Home, LogOut, BarChart } from 'lucide-react';
+import { Menu, X, Users, Home, LogOut, BarChart, FileText, HelpCircle, UserPlus } from 'lucide-react';
 import { cn } from '../lib/utils';
 import { Button } from './ui/button';
 
@@ -14,7 +14,9 @@ export function Layout({ children }: { children: React.ReactNode }) {
   const navigation = isAdmin
     ? [
         { name: 'Home', href: '/dashboard', icon: Home, description: 'Fill out surveys' },
-        { name: 'Admin Dashboard', href: '/admin', icon: BarChart, description: 'View analytics' },
+        { name: 'Admin Dashboard', href: '/admin', icon: BarChart, description: 'View all responses' },
+        { name: 'Set Question', href: '/admin/question', icon: HelpCircle, description: 'Set daily question' },
+        { name: 'Manage Admins', href: '/admin/users', icon: UserPlus, description: 'Manage admin users' },
       ]
     : [];
 
