@@ -14,10 +14,7 @@ COPY . .
 # Build the application
 RUN npm run build
 
-# Make the startup script executable
-RUN chmod +x /usr/src/app/src/scripts/startup.sh
-
 EXPOSE 3001
 
-# Use the startup script as entry point
-CMD ["/usr/src/app/src/scripts/startup.sh"]
+# Start the application directly
+CMD ["sh", "-c", "npm run create-admin && npm run start:prod"]
