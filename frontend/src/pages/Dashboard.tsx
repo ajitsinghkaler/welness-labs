@@ -76,6 +76,7 @@ const Dashboard: React.FC = () => {
                 value={response}
                 onChange={(e) => setResponse(e.target.value)}
                 placeholder="Your response..."
+                required
                 className="min-h-[100px]"
               />
             </div>
