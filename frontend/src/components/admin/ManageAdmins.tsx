@@ -4,6 +4,7 @@ import {
   useAddAdminUser,
   useRemoveAdminUser,
 } from "../../lib/queries";
+import { useAuth } from "../../contexts/AuthContext";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import {
@@ -17,6 +18,7 @@ import {
 import { Button } from "@/components/ui/button";
 import { Alert, AlertTitle, AlertDescription } from "@/components/ui/alert";
 import { UserPlus, Users, AlertCircle, CheckCircle2 } from "lucide-react";
+import { cn } from "@/lib/utils";
 
 // Define the AdminUser interface
 interface AdminUser {
@@ -27,6 +29,7 @@ interface AdminUser {
 }
 
 const ManageAdmins: React.FC = () => {
+  const { user: currentUser } = useAuth();
   const [newAdmin, setNewAdmin] = useState({
     name: "",
     email: "",
@@ -59,7 +62,12 @@ const ManageAdmins: React.FC = () => {
   };
 
   // Handle removing an admin
-  const handleRemoveAdmin = (userId: string) => {
+  const handleRemoveAdmin = (userId: string, adminEmail: string) => {
+    if (adminEmail === currentUser?.email) {
+      setError("You cannot delete your own admin account");
+      return;
+    }
+    
     if (window.confirm("Are you sure you want to remove this admin?")) {
       setError("");
       setSuccess("");
@@ -208,13 +216,16 @@ const ManageAdmins: React.FC = () => {
                     </TableCell>
                     <TableCell className="text-right">
                       <Button
-                        onClick={() => handleRemoveAdmin(admin._id)}
-                        disabled={removingAdmin}
+                        onClick={() => handleRemoveAdmin(admin._id, admin.email)}
+                        disabled={removingAdmin || admin.email === currentUser?.email}
                         variant="ghost"
                         size="sm"
-                        className="text-destructive"
+                        className={cn(
+                          "text-destructive",
+                          admin.email === currentUser?.email && "opacity-50 cursor-not-allowed"
+                        )}
                       >
-                        Remove
+                        {admin.email === currentUser?.email ? "N/A" : "Remove"}
                       </Button>
                     </TableCell>
                   </TableRow>
