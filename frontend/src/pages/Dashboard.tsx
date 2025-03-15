@@ -31,23 +31,19 @@ const Dashboard: React.FC = () => {
     e.preventDefault();
     if (!response.trim()) return;
 
-    try {
-      submitResponse(response, {
-        onSuccess: () => {
-          setResponse("");
-          setError(null);
-          setSuccess(true);
-          setTimeout(() => setSuccess(false), 3000);
-        },
-        onError: (err) => {
-          setError(
-            err instanceof Error ? err.message : "Failed to submit response"
-          );
-        },
-      });
-    } catch (err) {
-      setError("Failed to submit response");
-    }
+    submitResponse(response, {
+      onSuccess: () => {
+        setResponse("");
+        setError(null);
+        setSuccess(true);
+        setTimeout(() => setSuccess(false), 3000);
+      },
+      onError: (err) => {
+        setError(
+          err instanceof Error ? err.message : "Failed to submit response"
+        );
+      },
+    });
   };
 
   if (isLoadingQuestion || isLoadingSurveys) {
