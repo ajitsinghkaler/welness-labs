@@ -33,15 +33,6 @@ export class SurveysController {
   async getSurveyHistory(@Request() req) {
     return this.surveysService.findByUserId(req.user.userId);
   }
-
-  @UseGuards(JwtAuthGuard)
-  @Get('admin/responses')
-  async getAllResponses(@Request() req) {
-    if (req.user.role !== 'admin') {
-      throw new UnauthorizedException('Admin access required');
-    }
-    return this.surveysService.findAll();
-  }
 }
 
 // Create a separate controller for admin endpoints
@@ -70,5 +61,14 @@ export class AdminSurveysController {
       throw new UnauthorizedException('Admin access required');
     }
     return this.surveysService.getAllDailyQuestions();
+  }
+
+  @UseGuards(JwtAuthGuard)
+  @Get('responses')
+  async getAllResponses(@Request() req) {
+    if (req.user.role !== 'admin') {
+      throw new UnauthorizedException('Admin access required');
+    }
+    return this.surveysService.findAll();
   }
 } 

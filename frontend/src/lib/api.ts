@@ -41,7 +41,7 @@ export const apiClient = {
     return res.data;
   },
   getAdminResponses: async () => {
-    const response = await api.get('/surveys/admin/responses');
+    const response = await api.get('/admin/responses');
     return response.data;
   },
   

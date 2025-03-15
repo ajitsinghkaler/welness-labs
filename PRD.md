@@ -72,7 +72,7 @@ Organizations lack an efficient way to gather regular feedback from employees ab
 
 #### Admin Operations
 - `POST /admin/question` - Set today's question
-- `GET /surveys/admin/responses` - Get all survey responses
+- `GET /admin/responses` - Get all survey responses
 - `GET /admin/users` - Get all admin users
 - `POST /admin/users` - Create an admin user
 - `DELETE /admin/users/:id` - Remove an admin user
