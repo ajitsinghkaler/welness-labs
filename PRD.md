@@ -1,151 +1,158 @@
-# Employee Pulse Application - Product Requirements Document
+# Employee Pulse Application - Product Requirements Document (Enhanced)
 
 ## Problem Statement
-Organizations lack an efficient way to gather regular feedback from employees about their work experience, engagement, and satisfaction. Traditional annual surveys are too infrequent to capture real-time sentiment and address issues promptly. The Employee Pulse Application provides a solution by enabling daily check-ins and continuous feedback collection.
+Organizations lack an efficient method for gathering frequent and actionable feedback from employees. Annual surveys do not capture real-time sentiments effectively, hindering timely interventions. The Employee Pulse Application addresses this by enabling continuous daily feedback.
 
 ## Target Users
 
-### 1. Employees
-- Regular staff members who provide daily feedback
-- All departments and levels within the organization
-- Users seeking a simple, efficient way to share thoughts and concerns
+### Employees
+- Regular staff across all departments
+- Users looking for a simple way to communicate their daily experiences and concerns
 
-### 2. Administrators
-- HR personnel who manage survey questions and review responses
-- Team managers who need insights into team sentiment
-- Organization leaders who make decisions based on feedback data
+### Administrators
+- HR professionals managing surveys
+- Managers and organizational leaders requiring employee insights
 
-## Key Features
+## Key Features (with Priority)
 
 ### Employee Portal
-1. **Authentication System**
-   - Secure email-based registration and login
-   - JWT-based authentication for protected routes
-   - Role-based access control (employee vs admin)
+- **Authentication System (Must-Have)**
+  - Secure email-based registration/login
+  - JWT authentication for protected routes
+  - Role-based access control (Employee/Admin)
 
-2. **Survey Response System**
-   - View and answer daily survey questions
-   - Submit detailed text-based responses
-   - Access personal survey submission history
-   - Simple, intuitive user interface
+- **Survey Response System (Must-Have)**
+  - Daily survey question display
+  - Submit text-based responses
+  - Intuitive user interface
+
+- **Survey History (Nice-to-Have)**
+  - View past survey responses
 
 ### Admin Portal
-1. **Authentication and User Management**
-   - Secure admin login with protected routes
-   - Role-based access control with admin-only features
-   - Add and remove administrator accounts
+- **Authentication and Access Management (Must-Have)**
+  - Secure admin login
+  - Role-based access to admin-only features
 
-2. **Survey Management**
-   - Create and set daily questions for all employees
-   - View all employee survey responses
-   - Export responses to CSV format for further analysis
-   - Filter and sort response data
+- **Survey Management (Must-Have)**
+  - Create/set daily survey questions
+  - View employee survey responses
+  - Export responses (CSV/JSON)
+  - View history of previous daily questions
+
+- **Admin User Management (Nice-to-Have)**
+  - Add or remove administrator accounts
 
 ## Technical Requirements
 
 ### Frontend
-- React with TypeScript for type safety
-- React Router for navigation between pages
-- React Query for efficient data fetching and caching
-- Context API for global state management (auth)
-- Responsive design with Tailwind CSS
+- React with TypeScript
+- React Router, React Query
+- Context API for global auth state
+- Responsive design using Tailwind CSS
 - Component-based architecture
 
 ### Backend
-- NestJS framework with TypeScript
-- MongoDB database for data storage
+- NestJS (TypeScript)
+- MongoDB with Mongoose
 - JWT for secure authentication
-- Mongoose for database schema modeling
-- RESTful API endpoints
-- Input validation using class-validator
+- RESTful APIs
+- Class-validator for input validation
 
 ### API Endpoints
 
 #### Authentication
-- `POST /auth/login` - User/Admin login
-- `POST /auth/register` - Register new employee
+- `POST /auth/login` – Login for User/Admin
+- `POST /auth/register` – Register Employee
 
 #### Survey Management (Employee)
-- `GET /surveys` - Fetch today's survey question
-- `POST /surveys/response` - Submit survey response
-- `GET /surveys/history` - Get user's survey history
+- `GET /surveys` – Today's survey question
+- `POST /surveys/response` – Submit response
+- `GET /surveys/history` – Employee's survey history
 
 #### Admin Operations
-- `POST /admin/question` - Set today's question
-- `GET /admin/responses` - Get all survey responses
-- `GET /admin/users` - Get all admin users
-- `POST /admin/users` - Create an admin user
-- `DELETE /admin/users/:id` - Remove an admin user
+- `POST /admin/question` – Set daily question
+- `GET /admin/responses` – View all responses
+- `GET /admin/users` – View all admin users
+- `POST /admin/users` – Create new admin
+- `DELETE /admin/users/:id` – Delete admin
+- `GET /admin/questions` – View history of daily questions
 
-### Data Models
+## Data Models (Explicit)
 
 #### User
-- id: unique identifier
-- name: user's full name
-- email: user's email address
-- password: hashed password
-- role: user role (admin or employee)
+- `email` (string, required, unique)
+- `password` (string, hashed, required)
+- `role` (string, required, default: 'employee')
+- `name` (string, required)
+- `createdAt` (Date, default: current timestamp)
 
 #### Survey Response
-- id: unique identifier
-- user: reference to user who submitted
-- question: the survey question text
-- response: user's response text
-- submittedAt: timestamp of submission
+- `userId` (ObjectId, reference to User, required)
+- `response` (string, required)
+- `submittedAt` (Date, default: current timestamp)
+- `question` (string, required)
 
 #### Daily Question
-- id: unique identifier
-- question: the daily question text
-- createdAt: timestamp when question was created
-- active: boolean indicating if question is active
+- `question` (string, required)
+- `createdAt` (Date, default: current timestamp)
+- `isActive` (boolean, default: true)
 
 ## Non-Functional Requirements
 
-1. **Security**
-   - Secure authentication with JWT
-   - Password hashing
-   - Protected API endpoints
-   - Input validation
+### Security
+- JWT authentication
+- Secure password hashing (bcrypt)
+- Protected endpoints
+- Comprehensive input validation
 
-2. **Performance**
-   - Quick page load times
-   - Efficient API responses
-   - Optimized data fetching with React Query
+### Performance
+- API response time under 300ms
+- Efficient querying and caching
+- Optimized frontend data fetching
 
-3. **Scalability**
-   - Container-based deployment with Docker
-   - Horizontal scaling capabilities
-   - Efficient database queries
+### Scalability
+- Docker containerization
+- Horizontal scaling support
+- Database query optimization
 
-4. **Usability**
-   - Intuitive UI/UX design
-   - Responsive layout for all devices
-   - Clear feedback for user actions
-   - Accessible design patterns
+### Usability
+- Clear and intuitive UI
+- Responsive across devices
+- Accessible UX patterns
 
-## Implementation Phases
+## Deployment Details
+- Docker-based container deployment
+- Cloud-hosted solution (AWS/Azure/GCP)
+- Continuous Integration and Deployment (CI/CD) pipeline
+
+## Assumptions & Constraints
+- Initially supporting up to 500 daily active users
+- Minimal budget constraints
+- Initial focus on core functionality (Phase 1)
+
+## Implementation Phases (Clearly Defined)
 
 ### Phase 1: Core Functionality
-- User authentication (login/register)
-- Basic employee survey question display
-- Survey response submission
-- Admin question creation
+- Authentication (Login/Register)
+- Daily survey question display
+- Response submission
+- Basic Admin question management
 
 ### Phase 2: Enhanced Features
-- Survey history for employees
-- Admin dashboard with response management
+- Survey response history
+- Admin dashboard enhancements
 - Admin user management
-- Data export functionality
+- Export functionalities
+- Daily questions history view
 
-### Phase 3: Advanced Features (Future)
-- Analytics dashboard with visualizations
-- Team-based survey responses
-- Survey templates and scheduling
-- Notification system for new questions
+## Success Metrics (Explicit KPIs)
+- Employee participation rate (>80%, tracked via analytics)
+- Response length and detail (average text length)
+- Admin satisfaction (interviews)
+- System uptime (99.9% availability)
 
-## Success Metrics
-- Employee participation rate (>80% target)
-- Response quality and length
-- Admin satisfaction with insights
-- System performance and reliability
-- User experience feedback
+## UI Mockups/Wireframes (Optional)
+- Recommended but not mandatory for initial phase
+- Basic mockups encouraged for clarity in future phases
+

@@ -13,6 +13,7 @@ A modern employee feedback collection system built with React, NestJS, and Mongo
 - **Admin Features**
   - Role-based access control
   - Create and manage daily survey questions
+  - View history of previous daily questions
   - View all employee responses
   - Export responses to CSV format
   - Add and remove admin users
@@ -141,6 +142,7 @@ The easiest way to run the application is using Docker Compose:
 - `GET /admin/users` - Get all admin users
 - `POST /admin/users` - Create an admin user
 - `DELETE /admin/users/:id` - Remove an admin user
+- `GET /admin/questions` - Get history of daily questions
 
 ## Development Commands
 
