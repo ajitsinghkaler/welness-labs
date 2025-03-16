@@ -1,12 +1,13 @@
 import { Controller, Post, Body, UnauthorizedException } from '@nestjs/common';
 import { AuthService } from './auth.service';
+import { LoginDto, RegisterDto } from './dto';
 
 @Controller('auth')
 export class AuthController {
   constructor(private authService: AuthService) {}
 
   @Post('login')
-  async login(@Body() loginDto: { email: string; password: string }) {
+  async login(@Body() loginDto: LoginDto) {
     const user = await this.authService.validateUser(
       loginDto.email,
       loginDto.password,
@@ -18,9 +19,7 @@ export class AuthController {
   }
 
   @Post('register')
-  async register(
-    @Body() registerDto: { email: string; password: string; name: string },
-  ) {
+  async register(@Body() registerDto: RegisterDto) {
     return this.authService.register(
       registerDto.email,
       registerDto.password,

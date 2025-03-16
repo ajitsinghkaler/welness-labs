@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Body, UseGuards, Request, UnauthorizedException } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { SurveysService } from './surveys.service';
+import { CreateSurveyResponseDto, CreateDailyQuestionDto } from './dto';
 
 @Controller('surveys')
 export class SurveysController {
@@ -18,7 +19,7 @@ export class SurveysController {
   @Post('response')
   async submitResponse(
     @Request() req,
-    @Body() responseDto: { response: string },
+    @Body() responseDto: CreateSurveyResponseDto,
   ) {
     const survey = await this.surveysService.create({
       userId: req.user.userId,
@@ -45,7 +46,7 @@ export class AdminSurveysController {
   @Post('question')
   async setDailyQuestion(
     @Request() req,
-    @Body() questionDto: { question: string },
+    @Body() questionDto: CreateDailyQuestionDto,
   ) {
     if (req.user.role !== 'admin') {
       throw new UnauthorizedException('Admin access required');

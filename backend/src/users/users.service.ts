@@ -3,6 +3,7 @@ import { InjectModel } from '@nestjs/mongoose';
 import { Model } from 'mongoose';
 import { User, UserDocument } from './user.schema';
 import * as bcryptjs from 'bcryptjs';
+import { CreateUserDto } from './dto';
 
 @Injectable()
 export class UsersService {
@@ -10,7 +11,7 @@ export class UsersService {
     @InjectModel(User.name) private userModel: Model<UserDocument>,
   ) {}
 
-  async create(createUserDto: any): Promise<UserDocument> {
+  async create(createUserDto: CreateUserDto): Promise<UserDocument> {
     const createdUser = new this.userModel(createUserDto);
     return createdUser.save();
   }
@@ -28,7 +29,7 @@ export class UsersService {
     return this.userModel.find({ role: 'admin' }).exec();
   }
 
-  async createAdmin(adminData: { email: string; password: string; name: string }): Promise<UserDocument> {
+  async createAdmin(adminData: CreateUserDto): Promise<UserDocument> {
     // Check if user already exists
     const existingUser = await this.findByEmail(adminData.email);
     if (existingUser) {

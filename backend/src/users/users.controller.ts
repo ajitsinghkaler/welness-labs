@@ -1,6 +1,7 @@
 import { Controller, Get, Post, Delete, Body, Param, UseGuards, Request, UnauthorizedException } from '@nestjs/common';
 import { JwtAuthGuard } from '../auth/jwt-auth.guard';
 import { UsersService } from './users.service';
+import { CreateUserDto } from './dto';
 
 @Controller('admin/users')
 export class UsersController {
@@ -19,7 +20,7 @@ export class UsersController {
   @Post()
   async createAdmin(
     @Request() req,
-    @Body() adminData: { email: string; password: string; name: string },
+    @Body() adminData: CreateUserDto,
   ) {
     if (req.user.role !== 'admin') {
       throw new UnauthorizedException('Admin access required');
