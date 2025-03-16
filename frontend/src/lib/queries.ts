@@ -71,14 +71,22 @@ export const useAdminUsers = () => {
   });
 };
 
+export const useGetDailyQuestions = () => {
+  return useQuery({
+    queryKey: ['dailyQuestions'],
+    queryFn: apiClient.getAllDailyQuestions,
+  });
+};
+
 export const useSetTodayQuestion = () => {
   const queryClient = useQueryClient();
   
   return useMutation({
     mutationFn: apiClient.setTodayQuestion,
     onSuccess: () => {
-      // Invalidate and refetch current survey after setting new question
+      // Invalidate and refetch current survey and daily questions after setting new question
       queryClient.invalidateQueries({ queryKey: ['currentSurvey'] });
+      queryClient.invalidateQueries({ queryKey: ['dailyQuestions'] });
     },
   });
 };

@@ -1,16 +1,23 @@
 import React, { useState } from "react";
-import { useSetTodayQuestion } from "../../lib/queries";
+import { useSetTodayQuestion, useGetDailyQuestions } from "../../lib/queries";
 import { Button } from "@/components/ui/button";
 import { Textarea } from "@/components/ui/textarea";
 import { Label } from "@/components/ui/label";
 import { Alert, AlertDescription } from "@/components/ui/alert";
-import { Edit, AlertCircle, CheckCircle2 } from "lucide-react";
+import { Edit, AlertCircle, CheckCircle2, History } from "lucide-react";
+
+interface DailyQuestion {
+  question: string;
+  createdAt: string;
+  isActive: boolean;
+}
 
 const TodayQuestion: React.FC = () => {
   const [newQuestion, setNewQuestion] = useState('');
   const [success, setSuccess] = useState('');
   const [error, setError] = useState('');
   const { mutate: setQuestion, isPending: settingQuestion } = useSetTodayQuestion();
+  const { data: previousQuestions = [], isLoading: loadingQuestions } = useGetDailyQuestions();
 
   // Handle setting today's question
   const handleSetQuestion = (e: React.FormEvent) => {
@@ -80,6 +87,31 @@ const TodayQuestion: React.FC = () => {
             {settingQuestion ? 'Setting Question...' : 'Set Question'}
           </Button>
         </form>
+      </div>
+
+      <div className="pt-8">
+        <h2 className="text-xl font-semibold mb-6 flex items-center">
+          <span className="text-primary mr-2">
+            <History size={20} />
+          </span>
+          Previous Questions
+        </h2>
+        {loadingQuestions ? (
+          <div className="text-muted-foreground">Loading previous questions...</div>
+        ) : previousQuestions.length > 0 ? (
+          <div className="space-y-4">
+            {previousQuestions.map((q: DailyQuestion, index: number) => (
+              <div key={index} className="border p-4 rounded-lg shadow-sm">
+                <p className="font-medium">{q.question}</p>
+                <p className="text-sm text-muted-foreground mt-1">
+                  {new Date(q.createdAt).toLocaleDateString()}
+                </p>
+              </div>
+            ))}
+          </div>
+        ) : (
+          <div className="text-muted-foreground">No previous questions found</div>
+        )}
       </div>
     </div>
   );

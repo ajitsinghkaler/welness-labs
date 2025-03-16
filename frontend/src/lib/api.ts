@@ -50,6 +50,10 @@ export const apiClient = {
     const response = await api.post('/admin/question', { question });
     return response.data;
   },
+  getAllDailyQuestions: async () => {
+    const response = await api.get('/admin/questions');
+    return response.data;
+  },
   getAdminUsers: async () => {
     const response = await api.get('/admin/users');
     return response.data;
