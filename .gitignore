@@ -36,3 +36,5 @@ Thumbs.db
 # MongoDB
 /data/db 
 
+**/dist
+**/node_modules
